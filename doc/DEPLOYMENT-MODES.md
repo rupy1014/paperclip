@@ -1,6 +1,6 @@
 # Deployment Modes
 
-Status: Canonical deployment and auth mode model  
+Status: Canonical deployment and auth mode model\
 Date: 2026-02-23
 
 ## 1. Purpose
@@ -20,7 +20,7 @@ This keeps one authenticated auth stack while still separating low-friction priv
 ## 2. Canonical Model
 
 | Runtime Mode | Exposure | Human auth | Primary use |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `local_trusted` | n/a | No login required | Single-operator local machine workflow |
 | `authenticated` | `private` | Login required | Private-network access (for example Tailscale/VPN/LAN) |
 | `authenticated` | `public` | Login required | Internet-facing/cloud deployment |
@@ -57,11 +57,15 @@ Server prompt behavior:
 
 1. ask mode, default `local_trusted`
 2. option copy:
+
 - `local_trusted`: "Easiest for local setup (no login, localhost-only)"
 - `authenticated`: "Login required; use for private network or public hosting"
+
 3. if `authenticated`, ask exposure:
+
 - `private`: "Private network access (for example Tailscale), lower setup friction"
 - `public`: "Internet-facing deployment, stricter security requirements"
+
 4. ask explicit public URL only for `authenticated + public`
 
 `configure --section server` follows the same interactive behavior.
@@ -88,7 +92,7 @@ Required integration points:
 
 This is required because user assignment paths validate active membership for `assigneeUserId`.
 
-## 7. Local Trusted -> Authenticated Claim Flow
+## 7. Local Trusted -&gt; Authenticated Claim Flow
 
 When running `authenticated` mode, if the only instance admin is `local-board`, Paperclip emits a startup warning with a one-time high-entropy claim URL.
 

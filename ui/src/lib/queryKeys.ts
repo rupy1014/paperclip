@@ -85,6 +85,36 @@ export const queryKeys = {
     comments: (approvalId: string) => ["approvals", "comments", approvalId] as const,
     issues: (approvalId: string) => ["approvals", "issues", approvalId] as const,
   },
+  packets: {
+    list: (companyId: string) => ["packets", companyId] as const,
+    listByProject: (companyId: string, projectId: string) =>
+      ["packets", companyId, "project", projectId] as const,
+    detail: (id: string) => ["packets", "detail", id] as const,
+  },
+  briefing: (companyId: string) => ["ceo-briefing", companyId] as const,
+  decisions: {
+    list: (companyId: string) => ["decisions", companyId] as const,
+    detail: (id: string) => ["decisions", "detail", id] as const,
+  },
+  assumptions: {
+    list: (companyId: string) => ["assumptions", companyId] as const,
+    detail: (id: string) => ["assumptions", "detail", id] as const,
+  },
+  learningEvents: {
+    list: (companyId: string) => ["learning-events", companyId] as const,
+    detail: (id: string) => ["learning-events", "detail", id] as const,
+  },
+  gatePolicies: {
+    list: (companyId: string) => ["gate-policies", companyId] as const,
+    detail: (id: string) => ["gate-policies", "detail", id] as const,
+  },
+  bundles: {
+    list: (companyId: string) => ["bundles", companyId] as const,
+    listByPacket: (companyId: string, packetId: string) =>
+      ["bundles", companyId, "packet", packetId] as const,
+    detail: (id: string) => ["bundles", "detail", id] as const,
+    items: (bundleId: string) => ["bundles", "items", bundleId] as const,
+  },
   access: {
     joinRequests: (companyId: string, status: string = "pending_approval") =>
       ["access", "join-requests", companyId, status] as const,

@@ -62,6 +62,9 @@
 - **CEO 브리핑**: 오너가 기본 진입점으로 보는 요약 화면이라는 overlay UX 용어다.
 - **실행 패킷(production packet)**: 내부 실행 단위. `issue + reserved documents + work-products + state`를 한 운영 단위로 묶는 개념이다.
 - **결과물 묶음(deliverable bundle)**: 오너/보드가 판단하는 결과물 묶음이다. CEO 요약, 핵심 문서, preview, decision request를 포함한다.
+- **의사결정 패키지(decision package)**: 결과물 묶음 + CEO 평가 + 리스크/가정 요약 + 판단 선택지를 하나로 묶은 오너 최종 판단 단위다. 전략적 고위험 판단에만 쓴다.
+- **가정 레지스트리(assumption registry)**: agent 산출물에 포함된 가정의 confidence level과 검증 방법을 명시한 목록이다.
+- **실행→학습 루프(execution → learning loop)**: 실행 결과가 기대와 크게 다를 때 자동으로 회고를 생성하고 전략을 수정하는 피드백 구조다.
 - **회사 공용 플레이북(company playbook)**: 일반 지식 저장소가 아니라, 여러 프로젝트에 재사용되는 회사 공용 운영 기억이다.
 - **프로젝트 브리프(project brief)**: 프로젝트 전용 맥락, 목표, 실행 환경/저장소 설정, 패킷 상태를 담는 표면이다.
 
@@ -81,6 +84,6 @@
 
 1. **기준 용어를 먼저 둔다**
 2. **overlay 용어는 UX 의미가 중요할 때만 쓴다**
-3. **`packet`과 `bundle`은 같은 뜻으로 섞어 쓰지 않는다**
+3. **`packet`, `bundle`, `decision package`는 각각 다른 개념이다**
 4. **`board`와 `owner`는 명시적으로 매핑될 때만 같은 주체로 읽는다**
 5. **`ehowlsla`는 upstream replacement가 아니라 운영 해석 레이어다**

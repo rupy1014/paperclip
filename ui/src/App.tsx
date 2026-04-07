@@ -38,6 +38,11 @@ import { AdapterManager } from "./pages/AdapterManager";
 import { PluginPage } from "./pages/PluginPage";
 import { RunTranscriptUxLab } from "./pages/RunTranscriptUxLab";
 import { OrgChart } from "./pages/OrgChart";
+import { Briefing } from "./pages/Briefing";
+import { BundleDetail } from "./pages/BundleDetail";
+import { DecisionPackageDetail } from "./pages/DecisionPackageDetail";
+import { GatePolicies } from "./pages/GatePolicies";
+import { AssumptionRegistry } from "./pages/AssumptionRegistry";
 import { NewAgent } from "./pages/NewAgent";
 import { AuthPage } from "./pages/Auth";
 import { BoardClaimPage } from "./pages/BoardClaim";
@@ -120,11 +125,14 @@ function CloudAccessGate() {
 function boardRoutes() {
   return (
     <>
-      <Route index element={<Navigate to="dashboard" replace />} />
+      <Route index element={<Navigate to="briefing" replace />} />
+      <Route path="briefing" element={<Briefing />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="onboarding" element={<OnboardingRoutePage />} />
       <Route path="companies" element={<Companies />} />
       <Route path="company/settings" element={<CompanySettings />} />
+      <Route path="company/gates" element={<GatePolicies />} />
+      <Route path="assumptions" element={<AssumptionRegistry />} />
       <Route path="company/export/*" element={<CompanyExport />} />
       <Route path="company/import" element={<CompanyImport />} />
       <Route path="skills/*" element={<CompanySkills />} />
@@ -166,6 +174,8 @@ function boardRoutes() {
       <Route path="approvals/pending" element={<Approvals />} />
       <Route path="approvals/all" element={<Approvals />} />
       <Route path="approvals/:approvalId" element={<ApprovalDetail />} />
+      <Route path="bundles/:bundleId" element={<BundleDetail />} />
+      <Route path="decisions/:decisionId" element={<DecisionPackageDetail />} />
       <Route path="costs" element={<Costs />} />
       <Route path="activity" element={<Activity />} />
       <Route path="inbox" element={<InboxRootRedirect />} />

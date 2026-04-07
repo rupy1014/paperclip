@@ -1,5 +1,6 @@
 import {
   Inbox,
+  Briefcase,
   CircleDot,
   Target,
   LayoutDashboard,
@@ -11,6 +12,8 @@ import {
   Boxes,
   Repeat,
   Settings,
+  ShieldCheck,
+  BookOpen,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { SidebarSection } from "./SidebarSection";
@@ -79,6 +82,7 @@ export function Sidebar() {
             <SquarePen className="h-4 w-4 shrink-0" />
             <span className="truncate">New Issue</span>
           </button>
+          <SidebarNavItem to="/briefing" label="Briefing" icon={Briefcase} />
           <SidebarNavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} liveCount={liveRunCount} />
           <SidebarNavItem
             to="/inbox"
@@ -112,6 +116,8 @@ export function Sidebar() {
           <SidebarNavItem to="/skills" label="Skills" icon={Boxes} />
           <SidebarNavItem to="/costs" label="Costs" icon={DollarSign} />
           <SidebarNavItem to="/activity" label="Activity" icon={History} />
+          <SidebarNavItem to="/assumptions" label="Assumptions" icon={BookOpen} />
+          <SidebarNavItem to="/company/gates" label="Gates" icon={ShieldCheck} />
           <SidebarNavItem to="/company/settings" label="Settings" icon={Settings} />
         </SidebarSection>
 

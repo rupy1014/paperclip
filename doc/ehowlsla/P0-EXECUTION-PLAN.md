@@ -20,14 +20,15 @@
 | --- | --- |
 | Phase 1 | 실행 패킷 규약 |
 | Phase 2 | 결과물 묶음 UX 정의 |
-| Phase 3 | CEO 브리핑 화면 정의 |
+| Phase 3 | CEO 브리핑 화면 정의 + 의사결정 패키지 |
 | Phase 4 | 선택형 review / approval 정책 |
+| Phase 5 | 산출물 품질 체계 (가정 레지스트리 + 실행→학습 루프) |
 
 ## 이 문서의 역할
 
 - [`BACKLOG.md`](./BACKLOG.md): 무엇이 필요한가
 - [`P0-EXECUTION-PLAN.md`](./P0-EXECUTION-PLAN.md): 무엇부터 할 것인가
-- [`examples/ai-jobdori.md`](./examples/ai-jobdori.md), [`examples/rovel-ai2.md`](./examples/rovel-ai2.md): 이 계획이 실제 프로젝트에 왜 필요한가
+- [`examples/ai-jobdori.md`](./examples/ai-jobdori.md), [`examples/rovel-ai2.md`](./examples/rovel-ai2.md), [`examples/ai-saju2.md`](./examples/ai-saju2.md): 이 계획이 실제 프로젝트에 왜 필요한가
 
 ## P0 목표
 
@@ -35,29 +36,32 @@ P0의 목적은 기능을 많이 추가하는 것이 아니다.
 
 > **오너가 덜 피곤하게, CEO와만 대화하면서, 결과물 묶음(deliverable bundle) 단위로 프로젝트를 운영할 수 있게 만드는 것**
 
-즉 P0는 아래 네 가지를 제품적으로 보이게 만드는 단계다.
+즉 P0는 아래 다섯 가지를 제품적으로 보이게 만드는 단계다.
 
-1. CEO 브리핑 화면
+1. CEO 브리핑 화면 + 의사결정 패키지
 2. 결과물 묶음 UX
 3. 실행 패킷 관례를 제품적으로 드러내기
 4. 선택형 review / approval 정책
+5. 산출물 품질 체계 (가정 레지스트리 + 실행→학습 루프)
 
 ## 왜 이 순서인가
 
-이 네 가지는 서로 의존한다.
+이 다섯 가지는 서로 의존한다.
 
 - 오너는 CEO 브리핑 화면이 있어야 전체를 안 보고도 운영할 수 있다.
 - CEO 브리핑 화면은 결과물 묶음이 있어야 의미가 있다.
 - 결과물 묶음은 실행 패킷 관례가 있어야 일관되게 묶인다.
 - review / approval 정책은 그 packet에 대해 언제 통제를 켤지 정해줘야 한다.
+- 산출물 품질 체계는 위 네 가지가 갖춰진 뒤에 "올라온 것을 얼마나 믿을 수 있는가"를 다룬다.
 
 즉 순서는 아래가 맞다.
 
 ```text
 실행 패킷 규약
   → 결과물 묶음 UX
-    → CEO 브리핑 화면
+    → CEO 브리핑 화면 + 의사결정 패키지
       → 선택형 review / approval 정책
+        → 산출물 품질 체계 (가정 레지스트리 + 실행→학습 루프)
 ```
 
 ## phase 요약
@@ -66,8 +70,9 @@ P0의 목적은 기능을 많이 추가하는 것이 아니다.
 | --- | --- | --- |
 | 1 | 내부 실행 단위를 어떻게 묶을까 | UI와 정책의 기준 단위 |
 | 2 | 오너에게 어떤 결과물을 보여줄까 | deliverable 중심 UX 언어 |
-| 3 | 오너가 어디서 판단할까 | CEO 중심 진입 화면 |
+| 3 | 오너가 어디서 판단할까 | CEO 중심 진입 화면 + 의사결정 패키지 |
 | 4 | 어디에만 통제를 걸까 | optional gate 정책 |
+| 5 | 산출물의 품질과 가정을 어떻게 검증할까 | 가정 레지스트리 + 실행→학습 자동 루프 |
 
 ## 실행 단계
 
@@ -143,32 +148,51 @@ P0의 목적은 기능을 많이 추가하는 것이 아니다.
 
 ---
 
-### Phase 3 — CEO 브리핑 화면 정의
+### Phase 3 — CEO 브리핑 화면 + 의사결정 패키지 정의
 
 #### 목표
 오너가 일반 board dashboard 대신 **CEO가 압축한 브리핑**을 보게 만든다.
+전략적 판단이 필요한 항목은 **의사결정 패키지(decision package)**로 묶어서 올린다.
 
 #### 해야 할 것
 브리핑 화면의 기본 섹션을 정한다.
 
 1. 지금 회사가 밀고 있는 것
-2. 오너에게 판단이 필요한 것
+2. 오너에게 판단이 필요한 것 → **의사결정 패키지 단위**
 3. 중간/최종 결과물 묶음
 4. CEO 코멘트
-5. 리스크 / 비용 / 막힘 요약
+5. 리스크 / 비용 / 막힘 요약 + **미검증 가정 요약**
 
 #### 중요한 원칙
 - 오너가 큐레이터/작가/엔지니어 task를 직접 triage하지 않게 한다.
 - raw transcript / log는 drill-down으로만 둔다.
 - CEO가 정리한 우선순위가 기본 진입점이 된다.
 
+#### 의사결정 패키지 구조
+전략적 판단이 필요한 항목은 결과물 묶음을 넘어 아래 구조로 묶는다.
+
+```text
+Decision Package
+├── Context: 현재 상태
+├── Deliverable Bundle: 산출물 요약 + 원본 링크
+├── CEO Assessment: 강점 / 리스크 / 빠진 것
+├── Assumption Registry: 미검증 가정 목록 (confidence + verification)
+├── Decision Required: [승인] / [수정요청] / [보류] 선택지
+└── Deadline
+```
+
+일상 운영은 결과물 묶음 수준으로 충분하다.
+의사결정 패키지는 예산 집행, 신규 프로젝트 론칭, 전략 전환 같은 고위험 판단에만 쓴다.
+
 #### 완료 조건
 - 오너는 이 화면 하나만 보고도 “무엇을 판단해야 하는가”를 알 수 있다.
 - “CEO랑만 얘기한다”가 UX로도 자연스러워진다.
+- 의사결정 패키지에 미검증 가정이 몇 건인지 요약이 포함된다.
 
 #### 산출물
 - owner entry surface 정의
 - CEO comment / risk / decision request 구조
+- decision package 구조 및 사용 기준
 
 ---
 
@@ -201,6 +225,76 @@ review / approval를 중요하게 유지하면서도,
 
 ---
 
+### Phase 5 — 산출물 품질 체계 (가정 레지스트리 + 실행→학습 루프)
+
+#### 목표
+agent 산출물의 가정을 명시적으로 추적하고,
+실행 결과가 전략에 자동으로 피드백되는 구조를 만든다.
+
+#### 왜 필요한가
+Phase 1-4가 "오너가 무엇을 보고 판단하는가"를 다룬다면,
+Phase 5는 **"agent가 만든 것을 얼마나 믿을 수 있는가"**와
+**"실행 후 틀린 것을 어떻게 고치는가"**를 다룬다.
+
+실제 운영에서 드러난 문제:
+- CMO가 만든 마케팅 전략에 인플루언서 단가가 추정치인지 실제 견적인지 구분이 안 됨
+- Phase 1 실행 후 KPI 미달이어도 전략 수정 트리거가 없음
+- 엔지니어가 구현 중 발견한 제약이 CMO의 채널 전략에 반영되지 않음
+
+#### 해야 할 것
+
+**A. 가정 레지스트리(Assumption Registry)**
+
+전략/예산/시장 관련 agent 산출물에 가정 목록을 포함시킨다.
+
+```yaml
+assumptions:
+  - claim: "가정 내용"
+    confidence: low | medium | high
+    source: estimate | benchmark | verified
+    verification: "검증 방법"
+```
+
+- confidence level 기준을 company playbook에 정의
+- CEO가 decision package 제출 시 "미검증 가정 N건, 고위험 M건" 자동 요약
+- 가정이 검증/반증되면 confidence를 갱신하고 관련 전략을 수정
+
+**B. 실행→학습 자동 루프(Execution → Learning Loop)**
+
+```text
+실행 완료
+  → 결과 측정 (KPI / 비용 / 산출물 품질)
+    → 기대 vs 실제 차이 > threshold?
+      ├── YES → retrospective issue 자동 생성
+      │         → CEO/리드가 원인 분석
+      │           → 전략 수정 or playbook 승격
+      └── NO  → 다음 cycle
+```
+
+- 프로젝트별 측정 기준과 threshold를 project brief에 정의
+- threshold 기본값은 "기대 대비 ±30%" (회사 playbook에서 조정 가능)
+- retro issue에는 원본 기대치, 실제 결과, 관련 가정이 자동 포함
+- retro에서 나온 개선점은 프로젝트 규약 또는 회사 playbook에 반영
+
+**C. 역할 간 교차 학습(Cross-Role Learning)**
+
+한 역할의 실행 중 발견한 제약이 다른 역할의 계획에 영향을 줄 때,
+CEO/리드가 영향 범위를 판단하고 수정 요청 이슈를 생성한다.
+
+#### 완료 조건
+- 전략 산출물에 가정 레지스트리가 포함되어 올라온다.
+- 실행 결과가 기대와 크게 다를 때 retro 이슈가 자동 생성된다.
+- retro에서 나온 학습이 playbook 승격까지 연결된다.
+- 역할 간 제약 발견이 관련 역할에 전파된다.
+
+#### 산출물
+- assumption registry 포맷 및 confidence level 기준
+- retrospective trigger 정책 (threshold, 측정 기준)
+- cross-role learning 판단 기준
+- 이 세 가지를 company playbook에 넣는 기본 템플릿
+
+---
+
 ## use case별 체감 순위
 
 ### ai-jobdori
@@ -216,15 +310,28 @@ review / approval를 중요하게 유지하면서도,
 3. CEO 브리핑 화면
 4. 선택형 review / approval
 
-즉 두 예시가 모두 중요하지만,
-rovel 쪽이 packet 모델의 필요성을 더 강하게 드러낸다.
+### ai-saju2 (운세냥)
+가장 먼저 체감되는 것은:
+1. 가정 레지스트리 (마케팅 전략의 가정 검증)
+2. 실행→학습 루프 (CPA, 전환율 등 실행 결과 → 전략 수정)
+3. 의사결정 패키지 (마케팅 Phase별 예산 집행 판단)
+4. 역할 간 교차 학습 (엔지니어 ↔ CMO 제약 공유)
+
+ai-saju2는 B2C SaaS로서 실행 결과가 숫자(매출, CPA, 전환율)로 즉시 측정되므로,
+**Phase 5(산출물 품질 체계)의 검증에 가장 적합한 테스트베드**다.
+
+즉 세 예시가 각각 다른 강점을 드러낸다.
+- ai-jobdori: 결과물 묶음과 반복 파이프라인
+- rovel.ai2: 실행 패킷과 멀티 프로젝트 구조
+- ai-saju2: 산출물 품질 검증과 실행→학습 루프
 
 ## use case 요약
 
-| use case | 가장 먼저 체감되는 것 |
-| --- | --- |
-| ai-jobdori | 결과물 묶음 UX, CEO 브리핑, 선택형 approval |
-| rovel.ai2 | 실행 패킷 규약, 결과물 묶음 UX, CEO 브리핑, 선택형 review/approval |
+| use case | 유형 | 가장 먼저 체감되는 것 |
+| --- | --- | --- |
+| ai-jobdori | 콘텐츠 파이프라인 | 결과물 묶음 UX, CEO 브리핑, 선택형 approval |
+| rovel.ai2 | 크리에이티브 스튜디오 | 실행 패킷 규약, 결과물 묶음 UX, CEO 브리핑, 선택형 review/approval |
+| ai-saju2 | B2C SaaS 운영 | 가정 레지스트리, 실행→학습 루프, 의사결정 패키지, 교차 학습 |
 
 ## 제외 범위
 
@@ -243,7 +350,8 @@ P0가 끝나면 아래가 가능해야 한다.
 2. 오너가 task 목록이 아니라 결과물 묶음 중심으로 판단한다.
 3. 작품/발행 후보/제작 단위를 실행 패킷으로 설명할 수 있다.
 4. review / approval가 필요한 단계에만 선택적으로 올라온다.
-5. ai-jobdori와 rovel.ai2 둘 다 같은 제품 표면 위에서 설명 가능하다.
+5. ai-jobdori, rovel.ai2, ai-saju2 셋 다 같은 제품 표면 위에서 설명 가능하다.
+6. 전략 산출물의 가정이 명시적으로 추적되고, 실행 결과가 전략에 피드백된다.
 
 ## 다음 문서 후보
 

@@ -41,6 +41,8 @@
 - 품질 검토와 승인
 - 복구와 추적
 - 비용 / 리스크 / 오너 피드백 루프
+- 산출물 가정 추적과 검증
+- 실행 결과 → 전략 수정 자동 루프
 
 반대로 다음은 Paperclip이 직접 다 하려 하면 안 된다.
 
@@ -74,7 +76,30 @@
 CEO가 좋은 운영 방식을 회사 공용 지침, 실행 패킷(production packet) 규약, 반복 운영 규칙, playbook으로 승격시켜
 다음 프로젝트에 재사용할 수 있어야 한다는 것이다.
 
-### 5. review / approval는 항상 강제하지 않는다
+### 5. agent 산출물의 가정은 명시적으로 추적한다
+
+agent가 전략, 예산, 시장 관련 산출물을 만들 때,
+그 안에 포함된 가정(assumption)은 confidence level과 검증 방법을 명시해야 한다.
+
+이유는 단순하다.
+**오너가 "이 숫자/판단이 검증된 것인지 추정인지" 구분할 수 없으면 좋은 판단을 내릴 수 없다.**
+
+가정 레지스트리(assumption registry)는 전략/예산 산출물에만 적용하며,
+CEO가 의사결정 패키지를 올릴 때 미검증 가정 요약을 포함한다.
+
+### 6. 실행 결과는 전략에 자동으로 피드백되어야 한다
+
+agent가 전략을 세우고, 실행하고, 끝.
+이 구조에서는 틀린 가정이 수정 없이 반복된다.
+
+따라서 실행 결과가 기대와 크게 다를 때(threshold 초과)
+자동으로 회고(retrospective) 이슈를 생성하고,
+그 학습이 프로젝트 규약 또는 회사 playbook에 반영되는 루프가 필요하다.
+
+이것은 "자동 학습"이 아니라,
+**실행 데이터가 전략 재검토의 트리거가 되는 구조**다.
+
+### 7. review / approval는 항상 강제하지 않는다
 
 - `review`는 품질 검토
 - `approval`는 거버넌스 결정
@@ -105,6 +130,7 @@ CEO가 좋은 운영 방식을 회사 공용 지침, 실행 패킷(production pa
 - [`examples/ai-jobdori-comparison.md`](./examples/ai-jobdori-comparison.md)
 - [`examples/rovel-ai2.md`](./examples/rovel-ai2.md)
 - [`examples/rovel-ai2-package-draft.md`](./examples/rovel-ai2-package-draft.md)
+- [`examples/ai-saju2.md`](./examples/ai-saju2.md) — B2C SaaS 운영 템플릿 시드
 
 ### 운영 문서
 - [`ops/claw-operations-log.md`](./ops/claw-operations-log.md)

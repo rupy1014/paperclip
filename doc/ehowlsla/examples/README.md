@@ -21,7 +21,7 @@
 
 읽는 순서는 보통 아래가 자연스럽다.
 
-1. 예시 본문 (`ai-jobdori.md`, `rovel-ai2.md`)
+1. 예시 본문 (`ai-jobdori.md`, `rovel-ai2.md`, `ai-saju2.md`)
 2. 필요하면 비교 문서 (`ai-jobdori-comparison.md`)
 3. 패키지 초안 (`*-package-draft.md`)
 

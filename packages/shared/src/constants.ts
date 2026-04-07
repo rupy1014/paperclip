@@ -212,6 +212,82 @@ export const APPROVAL_STATUSES = [
 ] as const;
 export type ApprovalStatus = (typeof APPROVAL_STATUSES)[number];
 
+export const PRODUCTION_PACKET_STATUSES = [
+  "draft",
+  "executing",
+  "review",
+  "done",
+  "retry",
+  "archive",
+] as const;
+export type ProductionPacketStatus = (typeof PRODUCTION_PACKET_STATUSES)[number];
+
+export const DELIVERABLE_BUNDLE_STATUSES = [
+  "pending",
+  "presented",
+  "approved",
+  "rejected",
+  "revision_requested",
+] as const;
+export type DeliverableBundleStatus = (typeof DELIVERABLE_BUNDLE_STATUSES)[number];
+
+export const DELIVERABLE_BUNDLE_ITEM_TYPES = [
+  "document",
+  "work_product",
+  "issue",
+] as const;
+export type DeliverableBundleItemType = (typeof DELIVERABLE_BUNDLE_ITEM_TYPES)[number];
+
+export const DECISION_PACKAGE_STATUSES = [
+  "pending",
+  "decided",
+  "deferred",
+] as const;
+export type DecisionPackageStatus = (typeof DECISION_PACKAGE_STATUSES)[number];
+
+export const GATE_POLICY_SCOPE_TYPES = ["company", "project", "agent"] as const;
+export type GatePolicyScopeType = (typeof GATE_POLICY_SCOPE_TYPES)[number];
+
+export const GATE_POLICY_ACTIONS = [
+  "publish",
+  "budget_exception",
+  "release",
+  "deploy",
+  "strategy_change",
+] as const;
+export type GatePolicyAction = (typeof GATE_POLICY_ACTIONS)[number];
+
+export const GATE_POLICY_FULFILLER_TYPES = ["board", "ceo_agent", "user"] as const;
+export type GatePolicyFulfillerType = (typeof GATE_POLICY_FULFILLER_TYPES)[number];
+
+export const GATE_POLICY_MODES = ["blocking", "advisory"] as const;
+export type GatePolicyMode = (typeof GATE_POLICY_MODES)[number];
+
+export const ASSUMPTION_SOURCE_TYPES = ["document", "work_product", "decision_package"] as const;
+export type AssumptionSourceType = (typeof ASSUMPTION_SOURCE_TYPES)[number];
+
+export const ASSUMPTION_CONFIDENCE_LEVELS = ["low", "medium", "high"] as const;
+export type AssumptionConfidenceLevel = (typeof ASSUMPTION_CONFIDENCE_LEVELS)[number];
+
+export const ASSUMPTION_VERIFICATION_STATUSES = ["unverified", "verified", "falsified"] as const;
+export type AssumptionVerificationStatus = (typeof ASSUMPTION_VERIFICATION_STATUSES)[number];
+
+export const ASSUMPTION_SOURCE_PROVENANCES = ["estimate", "benchmark", "verified"] as const;
+export type AssumptionSourceProvenance = (typeof ASSUMPTION_SOURCE_PROVENANCES)[number];
+
+export const LEARNING_EVENT_TRIGGER_TYPES = [
+  "deviation_detected",
+  "assumption_falsified",
+  "retro_generated",
+] as const;
+export type LearningEventTriggerType = (typeof LEARNING_EVENT_TRIGGER_TYPES)[number];
+
+export const LEARNING_EVENT_DEVIATION_MAGNITUDES = ["minor", "significant", "major"] as const;
+export type LearningEventDeviationMagnitude = (typeof LEARNING_EVENT_DEVIATION_MAGNITUDES)[number];
+
+export const LEARNING_EVENT_STATUSES = ["pending", "retro_created", "propagated", "dismissed"] as const;
+export type LearningEventStatus = (typeof LEARNING_EVENT_STATUSES)[number];
+
 export const SECRET_PROVIDERS = [
   "local_encrypted",
   "aws_secrets_manager",

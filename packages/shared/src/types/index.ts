@@ -112,6 +112,12 @@ export type {
 } from "./issue.js";
 export type { Goal } from "./goal.js";
 export type { Approval, ApprovalComment } from "./approval.js";
+export type { ProductionPacket } from "./production-packet.js";
+export type { DeliverableBundle, DeliverableBundleItem } from "./deliverable-bundle.js";
+export type { DecisionPackage, DecisionOption } from "./decision-package.js";
+export type { GatePolicy } from "./gate-policy.js";
+export type { AssumptionEntry } from "./assumption.js";
+export type { LearningEvent } from "./learning-event.js";
 export type {
   BudgetPolicy,
   BudgetPolicySummary,

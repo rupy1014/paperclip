@@ -164,7 +164,86 @@ ehowlsla 관점에서는 둘 다 **공개 템플릿 레지스트리/마켓 방�
 즉 rovel은 **더 강력한 템플릿 시드**지만,
 ai-jobdori보다 템플릿으로 굳히는 데 더 많은 규약이 필요하다.
 
-## 8. 지금 당장 가장 실용적인 방향
+## 8. ai-saju2를 템플릿 시드로 보면
+
+ai-saju2(운세냥, jeommyo.com)는 AI 기반 사주 분석 B2C SaaS 서비스다.
+기존 두 예시(콘텐츠 파이프라인, 크리에이티브 스튜디오)와 다른 유형의 템플릿 시드로 가치가 있다.
+
+### 왜 세 번째 시드가 필요한가
+
+| 템플릿 | 유형 | 핵심 패턴 |
+| --- | --- | --- |
+| ai-jobdori | 콘텐츠 파이프라인 | intake → curation → publish |
+| rovel.ai2 | 크리에이티브 스튜디오 | 기획 → 에셋 → 패키징 |
+| **ai-saju2** | **B2C SaaS 운영** | **마케팅 → 전환 → retention → viral** |
+
+기존 두 시드는 "만드는 것(production)"에 강하다.
+ai-saju2는 **"만든 것을 팔고 개선하는 것(growth operation)"**에 강하다.
+
+### 강한 점
+- 실행 결과가 숫자(DAU, CPA, 전환율, ARPU)로 즉시 측정된다
+- 가정 레지스트리와 실행→학습 루프 검증에 최적
+- CMO/Growth 역할이 핵심이라 마케팅 운영 패턴을 잡을 수 있다
+- 역할 간 교차 학습(엔지니어 ↔ CMO) 패턴이 명확하다
+
+### 역할 구조
+- CEO: 전체 방향, 오너 브리핑, Phase간 전환 판단
+- CMO: 채널 전략, 캠페인 기획, KPI 설정, 크리에이티브 기획
+- Engineer: 제품 구현, share card, 결제, 인프라
+- Data/Growth: 전환 분석, A/B 테스트, retention 분석
+
+### 패킷/결과물 구조
+- `marketing_plan`: 채널 플레이북 + 예산 + KPI + 가정 레지스트리
+- `campaign_package`: 크리에이티브 에셋 + 타겟 + 예산 + 실행 기준
+- `growth_report`: 기간별 KPI 실적 + 기대 대비 차이 + retro 연결
+- `feature_spec`: 제품 기능 스펙 (share card, 커플 궁합 등)
+
+### 가정 레지스트리가 특히 중요한 이유
+ai-saju2의 CMO 산출물을 보면:
+- 인플루언서 단가(5-60만원)가 추정인지 실제 견적인지 불명
+- Phase 1 KPI(DAU 50)의 근거가 불명
+- 전환율 30%의 출처가 벤치마크인지 희망인지 불명
+
+이런 가정이 명시되지 않으면 CEO가 오너에게 올리는 의사결정 패키지의 품질이 떨어진다.
+
+### 실행→학습 루프가 가장 잘 작동하는 이유
+B2C SaaS는 실행 결과가 빠르게 측정된다.
+- Phase 1 2주 후 DAU 50 목표 대비 실제 15면 → retro issue 자동 생성
+- CPA가 제품 가격(19,800원)의 50% 초과 시 → 채널 전략 재검토 trigger
+- share card 전환율이 기대 대비 낮으면 → 엔지니어에게 UX 개선, CMO에게 채널 수정
+
+이런 피드백 루프가 작동하면 "가정 기반 전략 → 데이터 기반 전략"으로 진화한다.
+
+### 템플릿으로 옮길 때 핵심
+- `Growth Operations`, `Product Development` 프로젝트
+- CEO / CMO / Engineer / Data 역할
+- `weekly-growth-review`, `campaign-retro`, `monthly-strategy-review` routine
+- 마케팅 channel별 KPI threshold 정책
+
+### 가져와서 제일 먼저 고칠 것
+- 제품 도메인 (사주 → 다른 B2C 서비스)
+- 결제 시스템 연동 (Bootpay → 해당 서비스)
+- 마케팅 채널 (한국 특화 → 대상 시장)
+- KPI 기준값과 threshold
+
+## 9. 세 시드의 상호 보완
+
+| 검증 대상 | ai-jobdori | rovel.ai2 | ai-saju2 |
+| --- | --- | --- | --- |
+| 실행 패킷 규약 | ○ | ◎ | ○ |
+| 결과물 묶음 UX | ◎ | ◎ | ○ |
+| CEO 브리핑 | ◎ | ◎ | ◎ |
+| 선택형 gate | ○ | ◎ | ○ |
+| 가정 레지스트리 | △ | △ | ◎ |
+| 실행→학습 루프 | △ | △ | ◎ |
+| 의사결정 패키지 | △ | ○ | ◎ |
+| 교차 학습 | △ | ○ | ◎ |
+
+◎ = 가장 잘 드러냄, ○ = 관련 있음, △ = 약하거나 해당 없음
+
+즉 세 시드를 함께 쓰면 ehowlsla 전체 컨셉을 고르게 검증할 수 있다.
+
+## 10. 지금 당장 가장 실용적인 방향
 
 현재 단계에서 가장 현실적인 접근은:
 
@@ -184,7 +263,7 @@ ai-jobdori보다 템플릿으로 굳히는 데 더 많은 규약이 필요하다
 - [`examples/ai-jobdori-package-draft.md`](./examples/ai-jobdori-package-draft.md)
 - [`examples/rovel-ai2-package-draft.md`](./examples/rovel-ai2-package-draft.md)
 
-## 9. 템플릿 시드를 읽는 사람에게 주는 팁
+## 11. 템플릿 시드를 읽는 사람에게 주는 팁
 
 템플릿을 그대로 믿고 가져오면 안 되고,
 최소한 아래를 먼저 고쳐야 한다.
@@ -204,7 +283,7 @@ ai-jobdori보다 템플릿으로 굳히는 데 더 많은 규약이 필요하다
 - 반복 운영 routine의 뼈대
 - CEO 중심 handoff 패턴
 
-## 10. 한 줄 결론
+## 12. 한 줄 결론
 
 `ehowlsla/examples/*`는 지금부터
 **“사례 문서”이면서 동시에 “미래 Paperclip 템플릿 시드”**

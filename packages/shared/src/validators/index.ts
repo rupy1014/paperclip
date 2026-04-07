@@ -197,6 +197,71 @@ export {
 } from "./approval.js";
 
 export {
+  productionPacketStatusSchema,
+  createProductionPacketSchema,
+  updateProductionPacketSchema,
+  type CreateProductionPacket,
+  type UpdateProductionPacket,
+} from "./production-packet.js";
+
+export {
+  deliverableBundleStatusSchema,
+  deliverableBundleItemTypeSchema,
+  createDeliverableBundleSchema,
+  updateDeliverableBundleSchema,
+  addBundleItemSchema,
+  decideBundleSchema,
+  type CreateDeliverableBundle,
+  type UpdateDeliverableBundle,
+  type AddBundleItem,
+  type DecideBundle,
+} from "./deliverable-bundle.js";
+
+export {
+  decisionPackageStatusSchema,
+  decisionOptionSchema,
+  createDecisionPackageSchema,
+  updateDecisionPackageSchema,
+  decideDecisionPackageSchema,
+  type CreateDecisionPackage,
+  type UpdateDecisionPackage,
+  type DecideDecisionPackage,
+} from "./decision-package.js";
+
+export {
+  gatePolicyScopeTypeSchema,
+  gatePolicyActionSchema,
+  gatePolicyFulfillerTypeSchema,
+  gatePolicyModeSchema,
+  upsertGatePolicySchema,
+  checkGatesSchema,
+  type UpsertGatePolicy,
+  type CheckGates,
+} from "./gate-policy.js";
+
+export {
+  assumptionSourceTypeSchema,
+  assumptionConfidenceLevelSchema,
+  assumptionVerificationStatusSchema,
+  createAssumptionEntrySchema,
+  updateAssumptionEntrySchema,
+  verifyAssumptionSchema,
+  type CreateAssumptionEntry,
+  type UpdateAssumptionEntry,
+  type VerifyAssumption,
+} from "./assumption.js";
+
+export {
+  learningEventTriggerTypeSchema,
+  learningEventDeviationMagnitudeSchema,
+  learningEventStatusSchema,
+  createLearningEventSchema,
+  updateLearningEventStatusSchema,
+  type CreateLearningEvent,
+  type UpdateLearningEventStatus,
+} from "./learning-event.js";
+
+export {
   envBindingPlainSchema,
   envBindingSecretRefSchema,
   envBindingSchema,

@@ -66,6 +66,30 @@ export const statusBadge: Record<string, string> = {
   approved: "bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300",
   rejected: "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300",
 
+  // Production packet statuses
+  draft: "bg-muted text-muted-foreground",
+  executing: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300",
+  review: "bg-violet-100 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300",
+  retry: "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300",
+  archive: "bg-muted text-muted-foreground",
+
+  // Deliverable bundle statuses (pending, approved, rejected reuse existing keys)
+  presented: "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300",
+
+  // Decision package statuses (pending reuses existing key)
+  decided: "bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300",
+  deferred: "bg-muted text-muted-foreground",
+
+  // Assumption verification statuses
+  unverified: "bg-muted text-muted-foreground",
+  verified: "bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300",
+  falsified: "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300",
+
+  // Learning event statuses
+  retro_created: "bg-violet-100 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300",
+  propagated: "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300",
+  dismissed: "bg-muted text-muted-foreground",
+
   // Issue statuses — consistent hues with issueStatusIcon above
   backlog: "bg-muted text-muted-foreground",
   todo: "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300",

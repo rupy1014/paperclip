@@ -17,7 +17,7 @@
 - [`AI-COMPANY.md`](./AI-COMPANY.md)는 누가 어떤 책임을 지는지 설명한다.
 - 이 문서는 그 조직이 **어떤 패턴으로 움직이는지**를 설명한다.
 - [`BACKLOG.md`](./BACKLOG.md)는 시뮬레이션 뒤에 남는 제품 갭과 다음 우선순위를 설명한다.
-- 프로젝트별 적용은 `examples/ai-jobdori.md`, `examples/rovel-ai2.md`를 본다.
+- 프로젝트별 적용은 `examples/ai-jobdori.md`, `examples/rovel-ai2.md`, `examples/ai-saju2.md`를 본다.
 
 ## 핵심 용어
 
@@ -209,7 +209,143 @@ project A 실행 → 회고/정리 → CEO가 공용 playbook으로 승격 → p
 - 이 승격 작업은 CEO나 리드가 명시적으로 해줘야 한다.
 - 프로젝트 전용 판단까지 무리하게 공용 규칙으로 올리면 오히려 품질이 떨어질 수 있다.
 
-### 9. 복구 / 재큐잉 경로
+### 9. 의사결정 패키지 제출
+
+여러 agent 산출물을 하나의 **오너 의사결정 단위**로 묶어서 올리는 패턴이다.
+결과물 묶음(deliverable bundle)이 "무엇을 만들었는가"라면,
+의사결정 패키지(decision package)는 "오너가 무엇을 판단해야 하는가"까지 포함한다.
+
+**구조**
+```text
+Decision Package
+├── Context: 현재 상태 요약
+├── Deliverable Bundle: 산출물 묶음 (요약 + 원본 링크)
+├── CEO Assessment:
+│   ├── 강점
+│   ├── 리스크
+│   └── 빠진 것
+├── Assumption Registry: 검증 안 된 가정 목록
+├── Decision Required:
+│   ├── [승인] 조건과 범위
+│   ├── [수정요청] 무엇을 고쳐야 하는지
+│   └── [보류] 선행 조건
+└── Deadline
+```
+
+**언제 쓰는가**
+- 예산 집행 판단
+- 신규 프로젝트 론칭 승인
+- 전략 방향 전환
+- 여러 역할의 산출물이 묶여야 의미가 있는 판단
+
+**장점**
+- 오너가 파일 여러 개를 읽지 않고 한 장으로 판단할 수 있다.
+- CEO의 평가와 리스크 분석이 함께 올라와서 판단 품질이 높아진다.
+- 가정 레지스트리를 통해 "검증 안 된 것"이 명시적으로 드러난다.
+
+**주의점**
+- 모든 결과물을 decision package로 포장하면 오히려 오너 피로가 커진다.
+- 일상 운영은 결과물 묶음 수준으로 충분하고, 전략적 판단에만 쓴다.
+
+### 10. 가정 레지스트리(Assumption Registry)
+
+agent 산출물에 포함된 가정을 **명시적으로 기록하고 추적**하는 패턴이다.
+
+**구조**
+```yaml
+assumptions:
+  - claim: "인플루언서 1건당 5-60만원"
+    confidence: low    # low / medium / high
+    source: estimate   # estimate / benchmark / verified
+    verification: "3곳 이상 DM 문의로 실제 단가 확인"
+  - claim: "landing → input 전환율 30%"
+    confidence: medium
+    source: benchmark
+    verification: "Phase 1 2주 데이터로 검증"
+```
+
+**언제 쓰는가**
+- agent가 전략 문서, 예산 계획, 시장 분석을 산출할 때
+- 외부 데이터에 기반한 판단을 포함할 때
+- 오너가 "이 숫자가 맞나?"라고 물을 수 있는 내용이 있을 때
+
+**장점**
+- CEO가 자동으로 "검증 안 된 가정 N건, 고위험 M건" 리스크 요약을 생성할 수 있다.
+- 오너가 어디를 먼저 검증해야 하는지 알 수 있다.
+- 가정이 검증되면 confidence를 올리고, 틀리면 전략을 수정하는 근거가 된다.
+
+**주의점**
+- 모든 산출물에 가정 레지스트리를 강제하면 과한 부담이 된다.
+- 전략/예산/시장 관련 산출물에만 적용하고, 코드나 기술 산출물에는 불필요하다.
+- confidence level 기준을 회사 playbook에 정의해두는 편이 좋다.
+
+### 11. 실행→학습 자동 루프(Execution → Learning Loop)
+
+실행 결과를 측정하고, 기대 대비 차이가 클 때 **자동으로 회고 이슈를 생성**하여
+전략 수정과 playbook 승격까지 연결하는 패턴이다.
+
+**흐름**
+```text
+실행 완료
+  → 결과 측정 (KPI / 비용 / 산출물 품질)
+    → 기대 vs 실제 비교
+      → 차이 > threshold?
+        ├── YES → retrospective issue 자동 생성
+        │         → 원인 분석 (CEO or 담당 역할)
+        │           → 전략 수정 or playbook 승격
+        └── NO  → 다음 cycle 계속
+```
+
+**언제 쓰는가**
+- 마케팅 캠페인 결과가 KPI와 크게 차이날 때
+- 반복 운영(routine)의 비용이나 시간이 예상을 벗어날 때
+- agent 산출물의 가정이 실행 후 틀린 것으로 드러났을 때
+
+**구성 요소**
+- **측정 기준**: KPI, 비용, 소요 시간, 품질 점수 등 (프로젝트별 정의)
+- **threshold**: "기대 대비 ±30%" 같은 차이 기준 (회사 playbook에 정의)
+- **retrospective issue**: 자동 생성되는 회고 이슈. 원본 실행 결과와 기대치를 포함
+- **학습 경로**: retro에서 나온 개선점을 프로젝트 규약 또는 회사 playbook에 반영
+
+**장점**
+- 실행 결과가 전략에 자동으로 피드백된다.
+- "잘못된 가정"이 다음 cycle에 수정 없이 반복되는 것을 방지한다.
+- playbook 승격의 구체적 계기가 생긴다.
+
+**주의점**
+- threshold를 너무 낮게 잡으면 retro 이슈가 과다 발생한다.
+- 자동 생성된 retro도 결국 사람(CEO/리드)이 판단해야 한다.
+- 모든 실행에 적용하면 과하다. B2C 전환율, 비용, 품질 같은 핵심 지표에만 건다.
+
+### 12. 역할 간 교차 학습(Cross-Role Learning)
+
+한 역할의 실행 과정에서 발견한 제약이나 인사이트가
+**다른 역할의 전략/계획에 반영**되는 패턴이다.
+
+**흐름**
+```text
+역할 A 실행 중 제약/인사이트 발견
+  → 관련 역할 B에 영향 있는지 판단 (CEO or 리드)
+    → 영향 있으면 역할 B에 수정 요청 이슈 생성
+      → 역할 B가 계획/산출물 수정
+```
+
+**예시**
+- 엔지니어가 share card 구현 중 "OG 이미지 동적 생성은 서버 비용이 크다" 발견
+  → CMO의 채널 전략에서 OG 카드 우선순위 재조정
+- QA가 "모바일에서 특정 결과 페이지 로딩 5초 이상" 발견
+  → 마케팅의 모바일 광고 랜딩 전략 수정
+
+**장점**
+- 실행 과정의 현실 제약이 전략 수준으로 올라온다.
+- 역할 간 사일로를 방지한다.
+
+**주의점**
+- 모든 발견을 cross-role로 전파하면 소음이 된다.
+- CEO나 리드가 "영향 범위 판단"을 해야 한다.
+- 해당 역할의 자율성을 침해하지 않는 선에서 전달한다.
+
+### 13. 복구 / 재큐잉 경로
 
 실패를 에러 메시지로만 남기지 않고,
 다음 행동을 만드는 상태로 다루는 패턴이다.
@@ -233,6 +369,10 @@ project A 실행 → 회고/정리 → CEO가 공용 playbook으로 승격 → p
 | 승인 기준 | approval 정책, CEO/보드 기준 |
 | deterministic 실행기 | 도구 실행 단계 경계, 실행 스크립트 |
 | 결과물 묶음 기준 | 결과물 묶음 규칙, output 규칙, 예시 문서 |
+| 오너 의사결정 단위 | 의사결정 패키지 구조, CEO assessment 기준 |
+| 산출물 가정 검증 | 가정 레지스트리 정책, confidence level 기준 |
+| 실행 후 학습 흐름 | threshold 정책, retrospective 템플릿, playbook 승격 기준 |
+| 역할 간 인사이트 전파 | cross-role learning 정책, 영향 범위 판단 기준 |
 
 ## examples와의 관계
 
@@ -241,3 +381,4 @@ project A 실행 → 회고/정리 → CEO가 공용 playbook으로 승격 → p
 
 - [`examples/ai-jobdori.md`](./examples/ai-jobdori.md)
 - [`examples/rovel-ai2.md`](./examples/rovel-ai2.md)
+- [`examples/ai-saju2.md`](./examples/ai-saju2.md)

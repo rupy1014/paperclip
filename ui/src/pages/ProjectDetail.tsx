@@ -33,10 +33,11 @@ import { PluginLauncherOutlet } from "@/plugins/launchers";
 import { PluginSlotMount, PluginSlotOutlet, usePluginSlots } from "@/plugins/slots";
 import { Copy, FolderOpen, GitBranch, Loader2, Play, Square } from "lucide-react";
 import { IssuesQuicklook } from "../components/IssuesQuicklook";
+import { ProjectPacketsList } from "../components/ProjectPacketsList";
 
 /* ── Top-level tab types ── */
 
-type ProjectBaseTab = "overview" | "list" | "workspaces" | "configuration" | "budget";
+type ProjectBaseTab = "overview" | "list" | "packets" | "workspaces" | "configuration" | "budget";
 type ProjectPluginTab = `plugin:${string}`;
 type ProjectTab = ProjectBaseTab | ProjectPluginTab;
 
@@ -53,6 +54,7 @@ function resolveProjectTab(pathname: string, projectId: string): ProjectTab | nu
   if (tab === "configuration") return "configuration";
   if (tab === "budget") return "budget";
   if (tab === "issues") return "list";
+  if (tab === "packets") return "packets";
   if (tab === "workspaces") return "workspaces";
   return null;
 }
@@ -852,6 +854,7 @@ export function ProjectDetail() {
         <PageTabBar
           items={[
             { value: "list", label: "Issues" },
+            { value: "packets", label: "Packets" },
             { value: "overview", label: "Overview" },
             ...(showWorkspacesTab ? [{ value: "workspaces", label: "Workspaces" }] : []),
             { value: "configuration", label: "Configuration" },
@@ -880,6 +883,10 @@ export function ProjectDetail() {
 
       {activeTab === "list" && project?.id && resolvedCompanyId && (
         <ProjectIssuesList projectId={project.id} companyId={resolvedCompanyId} />
+      )}
+
+      {activeTab === "packets" && project?.id && resolvedCompanyId && (
+        <ProjectPacketsList projectId={project.id} companyId={resolvedCompanyId} />
       )}
 
       {activeTab === "workspaces" ? (

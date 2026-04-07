@@ -48,12 +48,14 @@
 | --- | --- | --- |
 | 내부 실행 단위 | 실행 패킷(production packet) | 하나의 발행 후보 / 작품 production unit / 제작 단위를 내부적으로 다루는 단위 |
 | 오너 판단 단위 | 결과물 묶음(deliverable bundle) | CEO 요약, 핵심 문서, preview, decision request를 포함하는 결과물 묶음 |
+| 오너 의사결정 단위 | 의사결정 패키지(decision package) | 결과물 묶음 + CEO 평가 + 리스크/가정 요약 + 판단 선택지를 하나로 묶은 오너 최종 판단 단위 |
 
 ### 구분 규칙
 
 - 실행 패킷 = 내부 실행 단위
 - 결과물 묶음 = 오너 판단 단위
-- 둘을 같은 뜻으로 섞어 쓰지 않는다
+- 의사결정 패키지 = 결과물 묶음 + CEO 평가 + 가정 레지스트리 + 판단 선택지를 묶은 최종 판단 단위
+- 셋을 같은 뜻으로 섞어 쓰지 않는다
 
 ## 기억 구조 매핑
 
@@ -68,6 +70,14 @@
 - playbook은 공용 표준이다.
 - project brief는 프로젝트 특수사항이다.
 - agent working style은 개인 생산성 계층이지 공용 표준이 아니다.
+
+## 산출물 품질 용어
+
+| 용어 | 의미 |
+| --- | --- |
+| assumption registry | agent 산출물에 포함된 가정(assumption) 목록. 각 가정에 confidence level과 검증 방법을 명시한다 |
+| retrospective trigger | 실행 결과가 기대와 일정 이상 차이날 때 자동으로 회고 이슈를 생성하는 트리거 |
+| execution → learning loop | 실행 완료 → 결과 측정 → 기대 대비 차이 감지 → 회고 → playbook 승격까지의 자동 피드백 루프 |
 
 ## lifecycle 용어
 
