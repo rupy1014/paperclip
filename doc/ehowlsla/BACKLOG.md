@@ -23,7 +23,7 @@
 | 구분 | 핵심 |
 | --- | --- |
 | P0 | CEO 브리핑 + 의사결정 패키지, 결과물 묶음 UX, 실행 패킷 가시화, 선택형 review/approval, 산출물 품질 체계 |
-| P1 | use case별 템플릿, asset/reference 카드, wave/program 뷰, company playbook surface |
+| P1 | use case별 템플릿, asset/reference 카드, wave/program 뷰, company playbook surface, 외부 프로젝트 감시/복구 |
 | 하지 말 것 | 대규모 workflow 엔진, Paperclip 자체 VN 엔진화, 도메인 알고리즘 흡수, 모든 단계 mandatory approval |
 
 ## 판단 기준
@@ -246,6 +246,20 @@ agent가 전략을 세우고 실행까지 하지만,
 CMO나 다른 전략 역할의 계획에 반영되는 구조가 없다.
 역할 간 사일로가 생긴다.
 
+### 10. 외부 프로젝트 서비스를 Paperclip 안에서 감시/복구할 수 없다
+
+같은 머신에서 Paperclip 외부 프로젝트가 돌아가고 있을 때,
+해당 서비스의 장애 감지, 원인 분석, 코드 수정, 재시작을
+Paperclip의 이슈/에이전트/승인 흐름 안에서 처리할 방법이 없다.
+
+외부 프로젝트 자체에 stall recovery나 launchd 같은 자체 복구가 있어도,
+근본 원인이 코드 버그인 경우 사람이 직접 SSH 접속해서 고쳐야 한다.
+
+필요한 것:
+- 에이전트가 외부 코드베이스(`cwd`)에서 직접 작업하는 구조
+- 재시작(L1)과 코드 수정(L2)을 gate policy로 분리하는 정책
+- 반복 장애가 learning loop을 통해 playbook에 축적되는 흐름
+
 ## gap 요약
 
 | gap | 현재 상태 |
@@ -259,6 +273,7 @@ CMO나 다른 전략 역할의 계획에 반영되는 구조가 없다.
 | 산출물 가정 추적 | agent 산출물의 가정이 confidence level 없이 올라옴 |
 | 실행→학습 루프 | 실행 결과가 전략 수정으로 자동 연결되지 않음 |
 | 역할 간 교차 학습 | 한 역할의 실행 제약이 다른 역할에 전파되지 않음 |
+| 외부 프로젝트 감시/복구 | 외부 서비스 장애를 Paperclip 운영 흐름 안에서 처리할 수 없음 |
 
 ---
 

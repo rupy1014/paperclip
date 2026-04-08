@@ -79,6 +79,15 @@ import {
   agentConfigurationDoc as hermesAgentConfigurationDoc,
   models as hermesModels,
 } from "hermes-paperclip-adapter";
+import {
+  execute as bitexingaiExecute,
+  testEnvironment as bitexingaiTestEnvironment,
+  listBitexingaiModels,
+} from "@paperclipai/adapter-bitexingai/server";
+import {
+  agentConfigurationDoc as bitexingaiAgentConfigurationDoc,
+  models as bitexingaiModels,
+} from "@paperclipai/adapter-bitexingai";
 import { BUILTIN_ADAPTER_TYPES } from "./builtin-adapter-types.js";
 import { buildExternalAdapters } from "./plugin-loader.js";
 import { getDisabledAdapterTypes } from "../services/adapter-plugin-store.js";
@@ -191,6 +200,16 @@ const hermesLocalAdapter: ServerAdapterModule = {
   detectModel: () => detectModelFromHermes(),
 };
 
+const bitexingaiAdapter: ServerAdapterModule = {
+  type: "bitexingai",
+  execute: bitexingaiExecute,
+  testEnvironment: bitexingaiTestEnvironment,
+  models: bitexingaiModels,
+  listModels: () => listBitexingaiModels({}),
+  supportsLocalAgentJwt: false,
+  agentConfigurationDoc: bitexingaiAgentConfigurationDoc,
+};
+
 const adaptersByType = new Map<string, ServerAdapterModule>();
 
 // For builtin types that are overridden by an external adapter, we keep the
@@ -212,6 +231,7 @@ function registerBuiltInAdapters() {
     geminiLocalAdapter,
     openclawGatewayAdapter,
     hermesLocalAdapter,
+    bitexingaiAdapter,
     processAdapter,
     httpAdapter,
   ]) {

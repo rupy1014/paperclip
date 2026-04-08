@@ -24,6 +24,7 @@ import { deliverableBundleRoutes } from "./routes/deliverable-bundles.js";
 import { briefingRoutes } from "./routes/briefing.js";
 import { gatePolicyRoutes } from "./routes/gate-policies.js";
 import { qualityRoutes } from "./routes/quality.js";
+import { watchdogRoutes } from "./routes/watchdog.js";
 import { secretRoutes } from "./routes/secrets.js";
 import { costRoutes } from "./routes/costs.js";
 import { activityRoutes } from "./routes/activity.js";
@@ -171,6 +172,7 @@ export async function createApp(
   api.use(briefingRoutes(db));
   api.use(gatePolicyRoutes(db));
   api.use(qualityRoutes(db));
+  api.use(watchdogRoutes(db));
   api.use(secretRoutes(db));
   api.use(costRoutes(db));
   api.use(activityRoutes(db));

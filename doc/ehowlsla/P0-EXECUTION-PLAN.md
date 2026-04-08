@@ -23,6 +23,7 @@
 | Phase 3 | CEO 브리핑 화면 정의 + 의사결정 패키지 |
 | Phase 4 | 선택형 review / approval 정책 |
 | Phase 5 | 산출물 품질 체계 (가정 레지스트리 + 실행→학습 루프) |
+| Phase 6 | 외부 프로젝트 감시/복구 (watchdog 루틴 + 외부 cwd 에이전트 + gate policy) |
 
 ## 이 문서의 역할
 
@@ -333,6 +334,36 @@ ai-saju2는 B2C SaaS로서 실행 결과가 숫자(매출, CPA, 전환율)로 �
 | rovel.ai2 | 크리에이티브 스튜디오 | 실행 패킷 규약, 결과물 묶음 UX, CEO 브리핑, 선택형 review/approval |
 | ai-saju2 | B2C SaaS 운영 | 가정 레지스트리, 실행→학습 루프, 의사결정 패키지, 교차 학습 |
 
+### Phase 6 — 외부 프로젝트 감시/복구
+
+Phase 5의 실행→학습 루프가 동작하면,
+같은 패턴을 **Paperclip 외부 서비스**에도 확장할 수 있다.
+
+**핵심 산출물**
+- watchdog 루틴 (health check + error rate 모니터링)
+- 외부 cwd 에이전트 설정 패턴
+- 복구 수준별 gate policy (L1 advisory / L2 blocking / L3 escalation)
+- 외부 서비스 장애의 learning event → constraint 전파 흐름
+
+**선행 조건**
+- Phase 4(gate policy)와 Phase 5(learning loop)가 동작해야 한다.
+- 외부 서비스가 health check 또는 로그 접근을 제공해야 한다.
+
+**첫 번째 적용 대상**: ai-saju2 report-worker (`~/sjtalk`)
+- 같은 Mac mini에서 동작
+- launchd로 관리
+- PID lock + stall recovery 있으나 코드 버그 복구 불가
+- 상세 시나리오: [`examples/ai-saju2.md`](./examples/ai-saju2.md)
+
+**구현 범위**
+1. `saju-infra-engineer` 에이전트 생성 (cwd: ~/sjtalk)
+2. 3개 watchdog 루틴 (health, stall, error-rate)
+3. gate policy 3개 (restart=advisory, deploy=blocking, strategy_change=blocking)
+4. learning event 연동 (반복 장애 → constraint → playbook 승격)
+
+**주의**: 이 Phase는 "외부 프로젝트를 Paperclip으로 마이그레이션"하는 것이 아니다.
+외부 프로젝트는 그대로 두고, **운영 가시성과 복구 능력만** Paperclip에 통합하는 것이다.
+
 ## 제외 범위
 
 P0에서 하지 않는 것:
@@ -352,6 +383,7 @@ P0가 끝나면 아래가 가능해야 한다.
 4. review / approval가 필요한 단계에만 선택적으로 올라온다.
 5. ai-jobdori, rovel.ai2, ai-saju2 셋 다 같은 제품 표면 위에서 설명 가능하다.
 6. 전략 산출물의 가정이 명시적으로 추적되고, 실행 결과가 전략에 피드백된다.
+7. 외부 프로젝트(ai-saju2 report-worker)의 장애가 Paperclip 이슈로 자동 생성되고, 에이전트가 코드 수정까지 수행할 수 있다.
 
 ## 다음 문서 후보
 

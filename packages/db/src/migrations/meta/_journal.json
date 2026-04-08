@@ -393,6 +393,13 @@
       "when": 1775602956390,
       "tag": "0055_classy_amphibian",
       "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1775607190514,
+      "tag": "0056_certain_wild_child",
+      "breakpoints": true
     }
   ]
 }

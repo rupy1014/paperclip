@@ -209,6 +209,104 @@ Engineer: "share card 이미지 서버 생성 비용 건당 15원, 월 10만건�
 - Engineer: Bootpay 결제 연동 주의점, Vercel 이미지 생성 제약
 - Data: GA4 + Supabase 데이터 조인 방법, UTM 파싱 패턴
 
+## 외부 서비스 감시 및 코드 수정 — report-worker
+
+ai-saju2의 핵심 인프라인 **report-worker**(사주 리포트 생성 파이프라인)는
+Paperclip 외부에서 독립적으로 동작한다.
+
+현재 자체 복구 메커니즘:
+- launchd `KeepAlive: true` → 프로세스 크래시 시 자동 재시작
+- PID lock → 중복 실행 방지
+- stall recovery → 10분 heartbeat 없으면 stalled job 자동 복구
+- job timeout → 개별 job 무한 대기 방지
+
+**하지만 근본 원인이 코드 버그인 경우** 자체 복구로는 해결이 안 된다.
+같은 에러가 반복 발생하면서 stall recovery만 무한 반복되는 상태가 된다.
+
+### Paperclip 통합 운영 모델
+
+```text
+에이전트: saju-infra-engineer
+  cwd: ~/sjtalk
+  adapter: claude-local
+  역할: engineer
+```
+
+#### 감시 루틴
+
+| 루틴 | 주기 | 체크 대상 | 이상 판단 |
+| --- | --- | --- | --- |
+| report-worker-health | 3분 | PID 파일 존재 + 프로세스 alive | pid 없거나 dead |
+| report-worker-stall | 10분 | worker status의 lastHeartbeat | 10분 초과 무응답 |
+| report-worker-error-rate | 30분 | 최근 30분 에러 로그 카운트 | 5건 이상 실패 |
+
+#### 복구 수준별 행동
+
+```text
+L1 — 프로세스 죽음 (launchd 미복구 시)
+  → 자동: launchctl kickstart -k gui/$(id -u)/com.ai-saju2.report-worker
+  → gate: advisory (알림만)
+  → learning event: 기록만
+
+L2 — 반복 실패 / stalled job 누적
+  → 에이전트가 이슈 할당받아 조사:
+    1. ~/Library/Logs/ai-saju2/*.log 분석
+    2. server/worker/report-worker.mjs 코드 확인
+    3. 원인 파악 → 코드 수정 → npm test
+    4. git commit (feature branch)
+  → gate: blocking (CEO 승인 후 재시작)
+  → learning event: 원인 + 수정 내역 기록
+    → threshold 초과 시 retro issue 자동 생성
+
+L3 — 외부 의존성 문제 (LLM API 장애, Supabase 다운 등)
+  → 의사결정 패키지 제출:
+    "report-worker 장애 — 외부 API 원인, 대응 옵션 3가지"
+  → gate: blocking
+  → 오너 판단 대기
+```
+
+#### 실제 시나리오 — report-worker 좀비 복구
+
+```text
+report-worker-error-rate 루틴이 30분간 8건 실패 감지
+  → 이슈 자동 생성: "[Watchdog] report-worker 에러율 급증"
+  → saju-infra-engineer 에이전트 할당
+  → 에이전트가 ~/sjtalk에서 작업:
+    1. tail -100 ~/Library/Logs/ai-saju2/*.err.log
+       → "TypeError: Cannot read properties of undefined (reading 'birthYear')"
+    2. grep -rn 'birthYear' server/worker/process-report-job.mjs
+       → 입력 validation 누락 발견
+    3. 코드 수정: null check 추가
+    4. npm test → pass
+    5. git checkout -b fix/report-worker-null-birth
+    6. git commit -m "fix: null check for birthYear in report-worker"
+  → gate policy 체크: 코드 수정 있음 → blocking
+  → CEO에게 승인 요청 (decision package 아님, 단순 gate approval)
+  → CEO 승인
+  → launchctl kickstart → 서비스 재시작
+  → learning event 생성:
+    trigger: deviation_detected
+    expected: "에러율 0"
+    actual: "30분간 8건 실패"
+    constraint: "report-worker 입력은 반드시 birthYear null check 필요"
+  → constraint가 company playbook에 승격 후보로 등록
+```
+
+#### gate policy 설정
+
+| action | mode | scope | 설명 |
+| --- | --- | --- | --- |
+| restart_external_service | advisory | company | L1 재시작은 알림만 |
+| deploy | blocking | project:sjtalk | 코드 수정 후 배포는 승인 필요 |
+| strategy_change | blocking | company | L3 외부 의존성 대응은 오너 판단 |
+
+### 이 패턴이 ai-saju2에 특히 유용한 이유
+
+1. **리포트 생성은 매출 직결** — worker 장애 = 결제 완료 사용자에게 리포트 미제공 = CS 폭주
+2. **Mac mini 단일 머신** — Paperclip과 report-worker가 같은 머신에서 동작하므로 에이전트가 직접 접근 가능
+3. **자체 복구 한계가 명확** — stall recovery는 "같은 에러로 재시도"만 하므로 코드 버그에 무력
+4. **learning loop 연결 가능** — 반복 장애 패턴이 playbook으로 축적되면 같은 유형의 버그를 사전 방지
+
 ## 이 예시가 ehowlsla에 기여하는 것
 
 | 컨셉 | ai-jobdori | rovel.ai2 | ai-saju2 |
@@ -220,5 +318,8 @@ Engineer: "share card 이미지 서버 생성 비용 건당 15원, 월 10만건�
 | 실행→학습 루프 | △ | △ | ◎ KPI 피드백 |
 | 의사결정 패키지 | △ | ○ | ◎ 예산/전략 판단 |
 | 역할 간 교차 학습 | △ | ○ | ◎ CMO ↔ Engineer |
+| 외부 서비스 감시/복구 | △ | △ | ◎ report-worker watchdog |
+| 외부 코드베이스 작업 | △ | △ | ◎ ~/sjtalk 직접 수정 |
 
-즉 ai-saju2는 ehowlsla의 **Phase 5(산출물 품질 체계)를 검증하는 primary test bed**다.
+즉 ai-saju2는 ehowlsla의 **Phase 5(산출물 품질 체계)를 검증하는 primary test bed**이면서,
+동시에 **외부 프로세스 감시/코드 수정 패턴(패턴 14, 15)의 첫 번째 적용 사례**이기도 하다.

@@ -42,6 +42,8 @@ import { Briefing } from "./pages/Briefing";
 import { BundleDetail } from "./pages/BundleDetail";
 import { DecisionPackageDetail } from "./pages/DecisionPackageDetail";
 import { GatePolicies } from "./pages/GatePolicies";
+import { WatchdogTargets } from "./pages/WatchdogTargets";
+import { WatchdogTargetDetail } from "./pages/WatchdogTargetDetail";
 import { AssumptionRegistry } from "./pages/AssumptionRegistry";
 import { NewAgent } from "./pages/NewAgent";
 import { AuthPage } from "./pages/Auth";
@@ -133,6 +135,8 @@ function boardRoutes() {
       <Route path="company/settings" element={<CompanySettings />} />
       <Route path="company/gates" element={<GatePolicies />} />
       <Route path="assumptions" element={<AssumptionRegistry />} />
+      <Route path="watchdog" element={<WatchdogTargets />} />
+      <Route path="watchdog/:id" element={<WatchdogTargetDetail />} />
       <Route path="company/export/*" element={<CompanyExport />} />
       <Route path="company/import" element={<CompanyImport />} />
       <Route path="skills/*" element={<CompanySkills />} />

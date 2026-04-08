@@ -358,6 +358,111 @@ assumptions:
 - 자동 재시도만 늘리면 문제를 숨길 수 있다.
 - 언제 자동 복구하고 언제 사람에게 escalation할지 경계가 필요하다.
 
+### 14. 외부 프로세스 감시 및 자동 복구(External Process Watchdog)
+
+같은 머신(또는 접근 가능한 호스트)에서 돌아가는 **Paperclip 외부 서비스**를
+Paperclip 에이전트가 주기적으로 감시하고, 이상 시 복구하는 패턴이다.
+
+**전제 조건**
+- 대상 서비스가 health check endpoint 또는 PID 파일을 제공한다.
+- 에이전트의 `cwd`가 대상 서비스 코드베이스로 설정 가능하다.
+- 서비스 재시작 수단이 존재한다 (launchd, systemd, pm2, shell script 등).
+
+**흐름**
+```text
+운영 루틴(routine) — 주기적 health check
+  → 정상 → 다음 주기 계속
+  → 이상 감지 (프로세스 죽음 / stalled job / 에러율 급증)
+    → severity 판단
+      ├── low (단순 프로세스 죽음) → 자동 재시작 + 알림
+      ├── medium (반복 실패 / stalled) → 이슈 생성 + 에이전트 조사
+      └── high (코드 버그 추정) → 이슈 생성 + CEO escalation
+```
+
+**복구 수준 3단계**
+
+| 수준 | 트리거 | 에이전트 행동 | Gate Policy |
+| --- | --- | --- | --- |
+| L1 재시작 | 프로세스 죽음, launchd 미복구 | `launchctl kickstart` 또는 `kill + restart` | advisory (알림만) |
+| L2 조사+수정 | 반복 실패, stalled job 누적, 에러 로그 패턴 | 로그 분석 → 원인 파악 → 코드 수정 → git commit → 재시작 | blocking (CEO 승인 후 실행) |
+| L3 전략 escalation | 근본 원인이 외부 의존성(API 변경, 인프라 등) | 의사결정 패키지 제출 → 오너 판단 | blocking |
+
+**왜 adapter가 아닌가**
+
+Paperclip adapter는 "에이전트 런타임을 연결하는 인터페이스"다.
+이 패턴은 에이전트가 **기존 인프라에 접근해서 직접 작업하는 것**이므로
+adapter보다는 **에이전트 + 루틴 + gate policy 조합**이 맞다.
+
+adapter가 적합한 경우:
+- 외부 서비스의 job queue를 Paperclip issue로 동기화할 때
+- 외부 서비스의 이벤트를 Paperclip webhook으로 받을 때
+
+에이전트가 적합한 경우:
+- 외부 서비스의 코드를 읽고 수정할 때
+- 로그를 분석하고 원인을 판단할 때
+- 수정 후 서비스를 재시작할 때
+
+**장점**
+- 외부 서비스를 Paperclip으로 마이그레이션하지 않고도 운영 통합이 된다.
+- gate policy로 "재시작은 자동, 코드 수정은 승인 필요" 분리가 가능하다.
+- learning loop과 연결하면 반복 장애의 근본 원인이 playbook에 축적된다.
+
+**주의점**
+- 에이전트에게 외부 코드베이스 write 권한을 주는 것이므로 gate policy가 반드시 필요하다.
+- 자동 재시작만 반복하면 근본 원인을 숨긴다. L2 이상 조사가 연결되어야 한다.
+- 외부 서비스의 배포 파이프라인이 있다면 그것을 통해 배포해야지, 직접 파일 수정으로 우회하면 안 된다.
+
+### 15. 외부 코드베이스 직접 작업(External Codebase Agent)
+
+에이전트의 작업 디렉토리(`cwd`)를 **Paperclip 외부 프로젝트**로 설정하여,
+해당 프로젝트의 코드를 읽고, 수정하고, 테스트하고, 배포하는 패턴이다.
+
+패턴 14(감시/복구)의 L2 수준에서 실제로 발동되는 실행 패턴이다.
+
+**에이전트 설정**
+```yaml
+agent:
+  name: "saju-infra-engineer"
+  role: engineer
+  adapterType: claude-local
+  adapterConfig:
+    cwd: "/Users/ehowlsla/sjtalk"   # 외부 프로젝트 경로
+    env:
+      ENV_FILE: "/Users/ehowlsla/sjtalk/.env.local"
+  capabilities: "외부 서비스 모니터링, 장애 분석, 코드 수정, 서비스 재시작"
+```
+
+**작업 흐름**
+```text
+이슈 할당 (감시 루틴 또는 CEO가 생성)
+  → 에이전트가 ~/sjtalk 에서 작업 시작
+    → 로그 읽기: ~/Library/Logs/ai-saju2/*.log
+    → 코드 분석: server/worker/report-worker.mjs
+    → 원인 파악 + 수정
+    → 테스트 실행: npm test
+    → git commit (feature branch)
+  → Gate Policy 체크
+    ├── 코드 수정 있음 → blocking gate → CEO 승인 대기
+    └── 재시작만 필요 → advisory gate → 즉시 실행
+  → 서비스 재시작: launchctl kickstart
+  → 결과 보고 (work product)
+```
+
+**언제 쓰는가**
+- 같은 머신에 Paperclip 외부 프로젝트가 공존할 때
+- 해당 프로젝트의 장애 복구, 기능 추가, 버그 수정을 Paperclip 회사 운영에 통합할 때
+- 프로젝트 전체를 Paperclip으로 마이그레이션하기엔 과하지만, 운영 가시성은 필요할 때
+
+**장점**
+- 외부 프로젝트의 코드 수정도 Paperclip의 이슈 → 실행 → 검토 → 승인 흐름을 탄다.
+- 수정 이력이 Paperclip activity log + git history 양쪽에 남는다.
+- learning loop과 연결하면 "어떤 종류의 장애가 반복되는가"가 축적된다.
+
+**주의점**
+- 외부 프로젝트의 CI/CD가 있다면 에이전트가 직접 배포하지 않고 PR을 올리는 것이 안전하다.
+- `cwd` 설정만으로 에이전트에게 해당 디렉토리 전체 접근 권한이 생기므로 scope를 문서화한다.
+- 비밀 정보(env 파일, credential)는 에이전트 adapterConfig.env로 주입하되 로그에 남기지 않도록 한다.
+
 ## 오케스트레이션을 바꾸고 싶을 때 어디를 고칠까
 
 | 바꾸고 싶은 것 | 먼저 볼 문서/설정 |
@@ -373,6 +478,8 @@ assumptions:
 | 산출물 가정 검증 | 가정 레지스트리 정책, confidence level 기준 |
 | 실행 후 학습 흐름 | threshold 정책, retrospective 템플릿, playbook 승격 기준 |
 | 역할 간 인사이트 전파 | cross-role learning 정책, 영향 범위 판단 기준 |
+| 외부 서비스 감시 / 복구 | 루틴 주기, health check 대상, 복구 수준별 gate policy |
+| 외부 코드베이스 에이전트 작업 | 에이전트 cwd, gate policy scope, 배포 경로 |
 
 ## examples와의 관계
 

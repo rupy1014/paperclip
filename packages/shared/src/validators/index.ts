@@ -252,6 +252,18 @@ export {
 } from "./assumption.js";
 
 export {
+  watchdogStatusSchema,
+  watchdogServiceTypeSchema,
+  watchdogCheckTypeSchema,
+  createWatchdogTargetSchema,
+  updateWatchdogTargetSchema,
+  reportCheckResultSchema,
+  type CreateWatchdogTarget,
+  type UpdateWatchdogTarget,
+  type ReportCheckResult,
+} from "./watchdog.js";
+
+export {
   learningEventTriggerTypeSchema,
   learningEventDeviationMagnitudeSchema,
   learningEventStatusSchema,

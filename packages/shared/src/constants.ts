@@ -254,6 +254,7 @@ export const GATE_POLICY_ACTIONS = [
   "release",
   "deploy",
   "strategy_change",
+  "restart_external_service",
 ] as const;
 export type GatePolicyAction = (typeof GATE_POLICY_ACTIONS)[number];
 
@@ -279,6 +280,7 @@ export const LEARNING_EVENT_TRIGGER_TYPES = [
   "deviation_detected",
   "assumption_falsified",
   "retro_generated",
+  "watchdog_alert",
 ] as const;
 export type LearningEventTriggerType = (typeof LEARNING_EVENT_TRIGGER_TYPES)[number];
 
@@ -287,6 +289,18 @@ export type LearningEventDeviationMagnitude = (typeof LEARNING_EVENT_DEVIATION_M
 
 export const LEARNING_EVENT_STATUSES = ["pending", "retro_created", "propagated", "dismissed"] as const;
 export type LearningEventStatus = (typeof LEARNING_EVENT_STATUSES)[number];
+
+export const WATCHDOG_STATUSES = ["active", "paused", "disabled"] as const;
+export type WatchdogStatus = (typeof WATCHDOG_STATUSES)[number];
+
+export const WATCHDOG_SERVICE_TYPES = ["launchd", "systemd", "pm2", "custom"] as const;
+export type WatchdogServiceType = (typeof WATCHDOG_SERVICE_TYPES)[number];
+
+export const WATCHDOG_RECOVERY_LEVELS = ["none", "L1", "L2", "L3"] as const;
+export type WatchdogRecoveryLevel = (typeof WATCHDOG_RECOVERY_LEVELS)[number];
+
+export const WATCHDOG_CHECK_TYPES = ["health", "stall", "error_rate"] as const;
+export type WatchdogCheckType = (typeof WATCHDOG_CHECK_TYPES)[number];
 
 export const SECRET_PROVIDERS = [
   "local_encrypted",

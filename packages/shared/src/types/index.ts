@@ -118,6 +118,7 @@ export type { DecisionPackage, DecisionOption } from "./decision-package.js";
 export type { GatePolicy } from "./gate-policy.js";
 export type { AssumptionEntry } from "./assumption.js";
 export type { LearningEvent } from "./learning-event.js";
+export type { WatchdogTarget, WatchdogServiceConfig, WatchdogCheckResult } from "./watchdog.js";
 export type {
   BudgetPolicy,
   BudgetPolicySummary,

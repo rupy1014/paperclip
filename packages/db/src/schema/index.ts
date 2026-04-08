@@ -54,6 +54,7 @@ export { decisionPackages } from "./decision_packages.js";
 export { gatePolicies } from "./gate_policies.js";
 export { assumptionEntries } from "./assumption_entries.js";
 export { learningEvents } from "./learning_events.js";
+export { watchdogTargets } from "./watchdog_targets.js";
 export { companySecrets } from "./company_secrets.js";
 export { companySecretVersions } from "./company_secret_versions.js";
 export { companySkills } from "./company_skills.js";

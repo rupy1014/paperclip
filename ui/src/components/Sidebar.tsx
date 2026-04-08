@@ -14,6 +14,7 @@ import {
   Settings,
   ShieldCheck,
   BookOpen,
+  Eye,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { SidebarSection } from "./SidebarSection";
@@ -118,6 +119,7 @@ export function Sidebar() {
           <SidebarNavItem to="/activity" label="Activity" icon={History} />
           <SidebarNavItem to="/assumptions" label="Assumptions" icon={BookOpen} />
           <SidebarNavItem to="/company/gates" label="Gates" icon={ShieldCheck} />
+          <SidebarNavItem to="/watchdog" label="Watchdog" icon={Eye} />
           <SidebarNavItem to="/company/settings" label="Settings" icon={Settings} />
         </SidebarSection>
 

@@ -108,6 +108,11 @@ export const queryKeys = {
     list: (companyId: string) => ["gate-policies", companyId] as const,
     detail: (id: string) => ["gate-policies", "detail", id] as const,
   },
+  watchdog: {
+    list: (companyId: string) => ["watchdog", companyId] as const,
+    detail: (companyId: string, id: string) => ["watchdog", companyId, "detail", id] as const,
+    history: (companyId: string, id: string) => ["watchdog", companyId, "history", id] as const,
+  },
   bundles: {
     list: (companyId: string) => ["bundles", companyId] as const,
     listByPacket: (companyId: string, packetId: string) =>
