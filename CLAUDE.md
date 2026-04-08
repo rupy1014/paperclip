@@ -1,5 +1,19 @@
 # Paperclip — ehowlsla overlay
 
+## Git 구조
+
+upstream 오픈소스(`paperclipai/paperclip`)를 fork(`rupy1014/paperclip`)해서 확장하는 구조.
+upstream 업데이트를 받으면서 ehowlsla overlay 커밋을 유지한다.
+
+| remote | repo | 용도 |
+|--------|------|------|
+| `origin` | `paperclipai/paperclip` | upstream (fetch only, push 권한 없음) |
+| `fork` | `rupy1014/paperclip` | 내 fork (push 대상) |
+
+- 작업 브랜치: `ehowlsla-deploy`
+- **"커밋, 푸시, 배포"** = `git push fork ehowlsla-deploy` → rsync → `pm2 restart paperclip`
+- upstream 동기화: `git fetch origin && git rebase origin/master` (마이그레이션 충돌 주의)
+
 ## Mac Mini 배포 (claw)
 
 ### 접속 정보

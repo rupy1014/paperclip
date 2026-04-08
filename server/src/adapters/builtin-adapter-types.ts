@@ -3,6 +3,7 @@
  */
 export const BUILTIN_ADAPTER_TYPES = new Set([
   "bitexingai",
+  "cn_llm_proxy",
   "claude_local",
   "codex_local",
   "cursor",

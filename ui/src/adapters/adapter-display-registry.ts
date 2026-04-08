@@ -108,6 +108,11 @@ const adapterDisplayMap: Record<string, AdapterDisplayInfo> = {
     icon: Cpu,
     comingSoon: true,
   },
+  cn_llm_proxy: {
+    label: "CN LLM Proxy",
+    description: "Chinese reseller LLM proxy (12ai, etc.)",
+    icon: Cpu,
+  },
 };
 
 // ---------------------------------------------------------------------------

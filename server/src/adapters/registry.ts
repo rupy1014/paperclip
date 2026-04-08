@@ -88,6 +88,15 @@ import {
   agentConfigurationDoc as bitexingaiAgentConfigurationDoc,
   models as bitexingaiModels,
 } from "@paperclipai/adapter-bitexingai";
+import {
+  execute as cnLlmProxyExecute,
+  testEnvironment as cnLlmProxyTestEnvironment,
+  listCnLlmProxyModels,
+} from "@paperclipai/adapter-cn-llm-proxy/server";
+import {
+  agentConfigurationDoc as cnLlmProxyAgentConfigurationDoc,
+  models as cnLlmProxyModels,
+} from "@paperclipai/adapter-cn-llm-proxy";
 import { BUILTIN_ADAPTER_TYPES } from "./builtin-adapter-types.js";
 import { buildExternalAdapters } from "./plugin-loader.js";
 import { getDisabledAdapterTypes } from "../services/adapter-plugin-store.js";
@@ -210,6 +219,16 @@ const bitexingaiAdapter: ServerAdapterModule = {
   agentConfigurationDoc: bitexingaiAgentConfigurationDoc,
 };
 
+const cnLlmProxyAdapter: ServerAdapterModule = {
+  type: "cn_llm_proxy",
+  execute: cnLlmProxyExecute,
+  testEnvironment: cnLlmProxyTestEnvironment,
+  models: cnLlmProxyModels,
+  listModels: () => listCnLlmProxyModels({}),
+  supportsLocalAgentJwt: false,
+  agentConfigurationDoc: cnLlmProxyAgentConfigurationDoc,
+};
+
 const adaptersByType = new Map<string, ServerAdapterModule>();
 
 // For builtin types that are overridden by an external adapter, we keep the
@@ -232,6 +251,7 @@ function registerBuiltInAdapters() {
     openclawGatewayAdapter,
     hermesLocalAdapter,
     bitexingaiAdapter,
+    cnLlmProxyAdapter,
     processAdapter,
     httpAdapter,
   ]) {
