@@ -462,6 +462,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.888.0
         version: 3.994.0
+      '@paperclipai/adapter-bitexingai':
+        specifier: workspace:*
+        version: link:../packages/adapters/bitexingai
       '@paperclipai/adapter-claude-local':
         specifier: workspace:*
         version: link:../packages/adapters/claude-local
